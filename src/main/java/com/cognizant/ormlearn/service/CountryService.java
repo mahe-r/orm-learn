@@ -2,23 +2,25 @@ package com.cognizant.ormlearn.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.cognizant.ormlearn.CountryRepository.CountryRepository;
 import com.cognizant.ormlearn.model.Country;
+import com.cognizant.ormlearn.service.exception.CountryNotFoundException;
 
-@Service
-public class CountryService {
+@Transactional
+public interface CountryService {
+
+	@Transactional(readOnly=true)
+	public List<Country> getAllCountries();
 	
-	@Autowired
-	CountryRepository countryRepository;
+	public Country findCountryByCode(String countryCode) throws CountryNotFoundException;
 	
-	@Transactional
-	 public List<Country> getAllCountries(){
-		 List<Country> countriesList = countryRepository.findAll();
-		 return countriesList;
-	 }
+	public void addCountry(Country country);
 	
+	public void updateCountry(String code,String name);
+	
+	public void deleteCountry(String countryCode);
+	
+	public List<Country> getAllMatchingCountries(String partialName);
+	
+	public List<Country> getAllCountriesStartingWithLetter(char startingLetter);
 }
